@@ -5,8 +5,7 @@ const NotFoundError = require('../errors/notFoundError');
 const BadRequestError = require('../errors/badRequestError');
 const NoAuthorizationError = require('../errors/noAuthorizationError');
 const ConflictRequestError = require('../errors/сonflictRequestError');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET } = require('../config');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -14,7 +13,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        JWT_SECRET,
         { expiresIn: '7d' },
       );
       res.send({ token });
@@ -26,42 +25,27 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-const getUsers = (req, res, next) => {
+const getUser = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
 
     .catch(next);
 };
 
-const getUsersId = (req, res, next) => {
+const updateUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
+      } else {
+        res.status(200).send({
+          email: req.body.email,
+          name: req.body.name,
+        });
       }
-      res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы неверные данные');
-      }
-      return next(err);
-    })
-    .catch(next);
-};
-
-const getCurrentUsersId = (req, res, next) => {
-  const id = req.user._id;
-
-  return User.findById(id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
-      }
-      return res.status(200).send(user);
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы неверные данные');
       }
       return next(err);
@@ -75,14 +59,10 @@ const createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
       name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
     }))
     .then((user) => {
       res.status(200).send({
         name: user.name,
-        about: user.about,
-        avatar: user.avatar,
         _id: user._id,
         email: user.email,
       });
@@ -99,32 +79,6 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
-const updateProfile = (req, res, next) => {
-  const id = req.user._id;
-  const { name, about } = req.body;
-  User.findByIdAndUpdate(id, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы неверные данные');
-      }
-    })
-    .catch(next);
-};
-
-const updateAvatar = (req, res, next) => {
-  const id = req.user._id;
-  const { avatar } = req.body;
-  User.findByIdAndUpdate(id, { avatar }, { new: true, runValidators: true })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы неверные данные');
-      }
-    })
-    .catch(next);
-};
-
 module.exports = {
-  login, getUsers, getUsersId, getCurrentUsersId, createUser, updateProfile, updateAvatar,
+  login, getUser, updateUser, createUser,
 };

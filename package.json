@@ -10,7 +10,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.5",
     "express-winston": "^4.0.5",
+    "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "validator": "^13.5.2",
@@ -39,6 +41,6 @@
     "url": "git+https://github.com/Tangom/movies-explorer-api"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tangom",
   "license": "ISC"
 }

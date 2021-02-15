@@ -1,6 +1,8 @@
 # movies-explorer-api
-Репозиторий для дипломной работы по  `Mesto`, включающий фронтенд и бэкенд части приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями. Бэкенд расположите в директории `backend/`, а фронтенд - в `frontend/`.
 
-* Ссылка на сайт, размещенный в Яндекс.облаке - http://tangom.students.nomoredomains.icu;
-* Домен сервера: http://api.tangom.students.nomoredomains.icu;
-* Публичный IP-адрес - 178.154.255.170;
+npm run start — запускает сервер
+npm run dev — запускает сервер с hot-reload
+
+* Ссылка на сайт - http://tango.students.nomoredomains.icu;
+* Домен сервера: http://api.tango.students.nomoredomains.icu;
+* Публичный IP-адрес - 130.193.52.212;
