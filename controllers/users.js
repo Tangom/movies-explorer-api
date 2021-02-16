@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const NotFoundError = require('../errors/notFoundError');
 const BadRequestError = require('../errors/badRequestError');
 const NoAuthorizationError = require('../errors/noAuthorizationError');
 const ConflictRequestError = require('../errors/сonflictRequestError');
@@ -33,17 +32,10 @@ const getUser = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-  User.findById(req.params.id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
-      } else {
-        res.status(200).send({
-          email: req.body.email,
-          name: req.body.name,
-        });
-      }
-    })
+  const id = req.user._id;
+  const { email, name } = req.body;
+  User.findOneAndUpdate(id, { email, name }, { new: true })
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы неверные данные');
@@ -63,7 +55,7 @@ const createUser = (req, res, next) => {
     .then((user) => {
       res.status(200).send({
         name: user.name,
-        _id: user._id,
+        // _id: user._id,
         email: user.email,
       });
     })

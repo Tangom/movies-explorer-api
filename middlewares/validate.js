@@ -85,8 +85,7 @@ const validateUser = celebrate({
         'string.max': 'name должен быть менее 30 символов',
         'any.required': 'Поле name обязательно для заполнения',
       }),
-    email: Joi.string().required()
-      .email().message('Некорректный email')
+    email: Joi.string().required().email()
       .messages({
         'any.required': 'Поле email обязательно для заполнения',
       }),
@@ -101,8 +100,7 @@ const validateSignup = celebrate({
         'string.max': 'name должен быть менее 30 символов',
         'any.required': 'Поле name обязательно для заполнения',
       }),
-    email: Joi.string().required()
-      .email().message('Некорректный email')
+    email: Joi.string().required().email()
       .messages({
         'any.required': 'Поле email обязательно для заполнения',
       }),
@@ -116,8 +114,7 @@ const validateSignup = celebrate({
 
 const validateSignin = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required()
-      .email().message('Некорректный email')
+    email: Joi.string().required().email()
       .messages({
         'any.required': 'Поле email должно быть заполнено',
       }),
