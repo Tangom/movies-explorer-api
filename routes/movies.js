@@ -6,7 +6,7 @@ const {
 
 router.get('/movies', getMovie);
 router.post('/movies', validateMovie, createMovie);
-router.delete('/movies/movieId', validateDeleteMovie, deleteMovie);
+router.delete('/movies/:movieId', validateDeleteMovie, deleteMovie);
 // router.put('/movies/:movieId/likes', likeMovies);
 // router.delete('/movies/:movieId/likes', dislikeMovies);
 

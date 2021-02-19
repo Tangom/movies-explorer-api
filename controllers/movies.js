@@ -38,7 +38,7 @@ const createMovie = (req, res, next) => {
     movieId,
     owner,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы неверные данные');
@@ -58,13 +58,13 @@ const deleteMovie = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Нет прав для удаления карточки');
       }
-      Movie.findByIdAndDelete(id)
+      return movie.remove(id)
         .then((deleted) => {
-          res.status(200).send(deleted);
+          res.send(deleted);
         });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'ObjectId') {
         throw new BadRequestError('Переданы неверные данные');
       }
       return next(err);
