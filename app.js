@@ -13,14 +13,14 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const whitelist = [
-  'http://localhost:3000',
-  'https://localhost:3000',
-  'http://localhost:3001',
-  'https://localhost:3001',
-  'http://tango.students.nomoredomains.icu',
-  'https://tango.students.nomoredomains.icu',
-];
+// const whitelist = [
+//   'http://localhost:3000',
+//   'https://localhost:3000',
+//   'http://localhost:3001',
+//   'https://localhost:3001',
+//   'http://tango.students.nomoredomains.icu',
+//   'https://tango.students.nomoredomains.icu',
+// ];
 // const corsOptions = {
 //   origin(origin, callback) {
 //     if (whitelist.indexOf(origin) !== -1) {
@@ -32,12 +32,15 @@ const whitelist = [
 //   credentials: true,
 //   optionsSuccessStatus: 200,
 // };
+//
 // app.use(cors(corsOptions));
 
-app.use(cors({
-  origin: whitelist,
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: whitelist,
+//   credentials: true,
+// }));
+
+app.use(cors());
 
 mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
