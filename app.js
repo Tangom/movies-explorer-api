@@ -32,7 +32,6 @@ const whitelist = [
 //   credentials: true,
 //   optionsSuccessStatus: 200,
 // };
-
 app.use(cors({
   origin: whitelist,
   credentials: true,
