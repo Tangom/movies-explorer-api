@@ -32,6 +32,8 @@ const whitelist = [
 //   credentials: true,
 //   optionsSuccessStatus: 200,
 // };
+// app.use(cors(corsOptions));
+
 app.use(cors({
   origin: whitelist,
   credentials: true,
@@ -43,8 +45,6 @@ mongoose.connect(MONGO_URL, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
-
-// app.use(cors(corsOptions));
 
 app.use(helmet());
 
