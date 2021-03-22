@@ -31,6 +31,20 @@ const getUser = (req, res, next) => {
     .catch(next);
 };
 
+const getCurrentUser = (req, res, next) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .then((data) => res.status(200).send(data))
+    .catch((err) => {
+      if (err.kind === 'ObjectId' || err.kind === 'CastError') {
+        next(new BadRequestError('Переданы неверные данные'));
+      } else {
+        next(err);
+      }
+    })
+    .catch(next);
+};
+
 const updateUser = (req, res, next) => {
   const id = req.user._id;
   const { email, name } = req.body;
@@ -71,5 +85,5 @@ const createUser = (req, res, next) => {
 };
 
 module.exports = {
-  login, getUser, updateUser, createUser,
+  login, getUser, updateUser, createUser, getCurrentUser,
 };
