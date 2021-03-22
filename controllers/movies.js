@@ -38,7 +38,20 @@ const createMovie = (req, res, next) => {
     movieId,
     owner,
   })
-    .then((movie) => res.send(movie))
+    .then((movie) => res.status(200).send({
+      country: movie.country,
+      director: movie.director,
+      duration: movie.duration,
+      year: movie.year,
+      description: movie.description,
+      image: movie.image,
+      trailer: movie.trailer,
+      thumbnail: movie.thumbnail,
+      movieId: movie.movieId,
+      nameRU: movie.nameRU,
+      nameEN: movie.nameEN,
+      _id: movie._id,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы неверные данные');
@@ -50,7 +63,7 @@ const createMovie = (req, res, next) => {
 
 const deleteMovie = (req, res, next) => {
   const id = req.params.movieId;
-  Movie.findById(id)
+  Movie.findById(id).select('+owner')
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Нет фильма с таким id');
@@ -71,54 +84,5 @@ const deleteMovie = (req, res, next) => {
     })
     .catch(next);
 };
-
-// const likeMovie = (req, res, next) => {
-//   const userId = req.user._id;
-//   User.findById(userId)
-//     .then((user) => {
-//       Movie.findByIdAndUpdate(
-//         { _id: req.params.cardId },
-//         { $addToSet: { likes: user.id } },
-//         { new: true },
-//       )
-//         .then((card) => {
-//           if (!card) {
-//             res.status(404).send({ message: 'Нет данных' });
-//           }
-//           res.status(200).send(card);
-//         })
-//         .catch((err) => {
-//           if (err.name === 'CastError') {
-//             res.status(400).send({ message: 'Переданы неверные данные' });
-//           }
-//           return next(err);
-//         })
-//         .catch(next);
-//     });
-// };
-//
-// const dislikeMovie = (req, res, next) => {
-//   const userId = req.user._id;
-//   User.findById(userId)
-//     .then((user) => {
-//       Movie.findByIdAndUpdate(
-//         { _id: req.params.cardId },
-//         { $pull: { likes: user._id } },
-//         { new: true },
-//       )
-//         .then((card) => {
-//           if (!card) {
-//             res.status(404).send({ message: 'Нет данных' });
-//           }
-//           res.status(200).send(card);
-//         })
-//         .catch((err) => {
-//           if (err.name === 'CastError') {
-//             res.status(400).send({ message: 'Переданы неверные данные' });
-//           }
-//           return next(err);
-//         })
-//         .catch(next);
-//     });
 
 module.exports = { getMovie, createMovie, deleteMovie };
