@@ -24,24 +24,10 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-const getUsers = (req, res, next) => {
+const getUser = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
 
-    .catch(next);
-};
-
-const getCurrentUser = (req, res, next) => {
-  const userId = req.user._id;
-  User.findById(userId)
-    .then((data) => res.status(200).send(data))
-    .catch((err) => {
-      if (err.kind === 'ObjectId' || err.kind === 'CastError') {
-        next(new BadRequestError('Переданы неверные данные'));
-      } else {
-        next(err);
-      }
-    })
     .catch(next);
 };
 
@@ -85,5 +71,5 @@ const createUser = (req, res, next) => {
 };
 
 module.exports = {
-  login, getUsers, updateUser, createUser, getCurrentUser,
+  login, getUser, updateUser, createUser,
 };
