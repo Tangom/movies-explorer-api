@@ -24,7 +24,7 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-const getUser = (req, res, next) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
 
@@ -85,5 +85,5 @@ const createUser = (req, res, next) => {
 };
 
 module.exports = {
-  login, getUser, updateUser, createUser, getCurrentUser,
+  login, getUsers, updateUser, createUser, getCurrentUser,
 };
