@@ -62,7 +62,7 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  const id = req.params.movieId;
+  const id = req.params;
   Movie.findById(id).select('+owner')
     .then((movie) => {
       if (!movie) {
@@ -71,10 +71,8 @@ const deleteMovie = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Нет прав для удаления карточки');
       }
-      return movie.remove(id)
-        .then((deleted) => {
-          res.send(deleted);
-        });
+      Movie.findByIdAndRemove(id)
+        .then((data) => res.status(200).send(data));
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'ObjectId') {
