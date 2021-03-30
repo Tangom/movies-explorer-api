@@ -62,7 +62,7 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  const id = req.params;
+  const { id } = req.params;
   Movie.findById(id).select('+owner')
     .then((movie) => {
       if (!movie) {
