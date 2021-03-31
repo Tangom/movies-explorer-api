@@ -31,10 +31,22 @@ const getUser = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-  const id = req.user._id;
-  const { email, name } = req.body;
-  User.findOneAndUpdate(id, { email, name }, { new: true })
-    .then((user) => res.status(200).send(user))
+  const { name, email } = req.body;
+  User.findById(req.user._id)
+    // eslint-disable-next-line consistent-return
+    .then((foundUser) => {
+      if (foundUser._id.toString() === req.user._id) {
+        return User.findByIdAndUpdate(
+          req.user._id,
+          { name, email },
+          {
+            new: true,
+            runValidators: true,
+          },
+        )
+          .then((user) => { res.send({ user }); });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Переданы неверные данные');
@@ -43,6 +55,20 @@ const updateUser = (req, res, next) => {
     })
     .catch(next);
 };
+
+// const updateUser = (req, res, next) => {
+//   const id = req.user._id;
+//   const { email, name } = req.body;
+//   User.findOneAndUpdate(id, { email, name }, { new: true })
+//     .then((user) => res.status(200).send(user))
+//     .catch((err) => {
+//       if (err.name === 'ValidationError') {
+//         throw new BadRequestError('Переданы неверные данные');
+//       }
+//       return next(err);
+//     })
+//     .catch(next);
+// };
 
 const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)

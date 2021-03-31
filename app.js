@@ -16,6 +16,8 @@ const app = express();
 const whitelist = [
   'https://localhost:3000',
   'https://localhost:3001',
+  'http://localhost:3000',
+  'http://localhost:3001',
   'http://tango.students.nomoredomains.icu',
   'https://tango.students.nomoredomains.icu',
 ];
